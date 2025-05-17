@@ -1,1 +1,4 @@
-# GitHub Actions workflow (placeholder)
+on:
+  push:
+    branches:
+      - main
