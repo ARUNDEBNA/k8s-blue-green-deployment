@@ -1,5 +1,4 @@
 name: Deploy EKS Cluster and Jenkins
-
 on:
   push:
     branches: [ main ]
