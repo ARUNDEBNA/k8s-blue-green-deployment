@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  AWS_REGION: us-west-2
+  AWS_REGION: us-west-2  # Hardcoded region here
   CLUSTER_NAME: jenkins-bluegreen-cluster
 
 jobs:
@@ -21,8 +21,9 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ env.AWS_REGION }}
+        aws-region: ${{ env.AWS_REGION }}  # References the hardcoded region
     
+    # Rest of your workflow remains the same...
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
       with:
@@ -39,30 +40,3 @@ jobs:
     - name: Terraform Apply
       run: terraform apply -auto-approve
       working-directory: ./terraform
-    
-    - name: Configure kubectl
-      run: |
-        aws eks --region ${{ env.AWS_REGION }} update-kubeconfig \
-          --name ${{ env.CLUSTER_NAME }}
-    
-    - name: Install Helm
-      run: |
-        curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
-        chmod 700 get_helm.sh
-        ./get_helm.sh
-    
-    - name: Deploy Jenkins
-      run: |
-        chmod +x kubernetes/jenkins/deploy.sh
-        ./kubernetes/jenkins/deploy.sh
-    
-    - name: Deploy Node.js App
-      run: |
-        kubectl apply -f kubernetes/nodeapp/deployment-blue.yaml
-        kubectl apply -f kubernetes/nodeapp/deployment-green.yaml
-        kubectl apply -f kubernetes/nodeapp/service.yaml
-    
-    - name: Get Jenkins URL
-      run: |
-        echo "Jenkins URL: http://$(kubectl get svc -n jenkins jenkins -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')"
-        echo "NodeApp URL: http://$(kubectl get svc nodeapp-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')"

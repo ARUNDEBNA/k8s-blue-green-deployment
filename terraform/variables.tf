@@ -46,7 +46,7 @@ variable "node_group_max_size" {
   default     = 3
 }
 
-variable "aws_iam_role_arn" {
-    description = "ARN of the IAM role to assume"
-    type = string
-}
+# variable "aws_iam_role_arn" {
+#     description = "ARN of the IAM role to assume"
+#     type = string
+# }
