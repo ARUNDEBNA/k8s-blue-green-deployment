@@ -1,30 +1,4 @@
 pipeline {
-  agent any
-  environment {
-    DOCKER_IMAGE = "<your-dockerhub-username>/bluegreen-app"
-    AWS_REGION = "us-east-1"
-    CLUSTER_NAME = "bluegreen-eks"
-  }
-  stages {
-    stage('Build & Push') {
-      steps {
-        sh '''
-        docker build -t $DOCKER_IMAGE:$BUILD_NUMBER nodejs-app/app
-        echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-        docker push $DOCKER_IMAGE:$BUILD_NUMBER
-        '''
-      }
-    }
-    stage('Deploy') {
-      steps {
-        sh '''
-        aws eks update-kubeconfig --region $AWS_REGION --name $CLUSTER_NAME
-        kubectl apply -f nodejs-app/k8s/deployment-green.yaml
-        kubectl set image deployment/nodejs-green nodejs=$DOCKER_IMAGE:$BUILD_NUMBER
-        kubectl rollout status deployment/nodejs-green
-        kubectl patch service nodejs-service -p '{"spec":{"selector":{"app":"nodejs","color":"green"}}}'
-        '''
-      }
-    }
-  }
+    agent any
+    stages { ... }
 }
