@@ -1,0 +1,3 @@
+mkdir eks-jenkins-bluegreen
+cd eks-jenkins-bluegreen
+mkdir -p terraform kubernetes/jenkins kubernetes/nodeapp

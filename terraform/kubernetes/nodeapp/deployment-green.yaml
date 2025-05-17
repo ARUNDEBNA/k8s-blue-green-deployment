@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodeapp-green
+  labels:
+    app: nodeapp
+    version: green
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nodeapp
+      version: green
+  template:
+    metadata:
+      labels:
+        app: nodeapp
+        version: green
+    spec:
+      containers:
+      - name: nodeapp
+        image: node:14
+        command: ["sh", "-c"]
+        args: ["echo 'Green version' > /usr/share/nginx/html/index.html && nginx -g 'daemon off;'"]
+        ports:
+        - containerPort: 80
