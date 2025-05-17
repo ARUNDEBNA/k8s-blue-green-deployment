@@ -102,9 +102,10 @@ provider "helm" {
   }
 }
 
-resource "kubernetes_namespace" "jenkins" {
-  metadata {
-    name = "jenkins"
+resource "null_resource" "create_jenkins_namespace" {
+  provisioner "local-exec" {
+    command = "kubectl create ns jenkins || true"
   }
+
   depends_on = [module.eks]
 }
