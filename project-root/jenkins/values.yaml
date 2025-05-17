@@ -1,1 +1,4 @@
-# Jenkins Helm values (placeholder)
+controller:
+  adminUser: admin
+  adminPassword: admin
+  serviceType: LoadBalancer
